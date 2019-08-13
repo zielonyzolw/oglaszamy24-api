@@ -1,0 +1,51 @@
+<div class="upload"><input type="file" #csvReader name="Upload CSV" id="txtFileUpload" (change)="uploadListener($event)" accept=".csv" />
+<br>
+<button (click)="fileReset()">Resetuj</button>
+  <button (click)="getApi()">Get api</button>
+</div>
+<table class="minimalistBlack" >
+  <thead>
+  <tr>
+    <th>Tytuł ogłoszenia </th>
+    <th>Opis </th>
+    <th>Kategoria podstawowa </th>
+    <th>Kategoria dodatkowa </th>
+    <th>Kategoria dodatkowa 2 </th>
+    <th>Imie osoby kontaktowej </th>
+    <th>Nr telefonu </th>
+    <th>Chce otrzymać maila <br>(1-nie, 0-tak) </th>
+    <th>Rodzaj oferty <br>(sprzedaż-1) </th>
+    <th>Cena </th>
+    <th>Miasto (id) </th>
+    <th>Typ <br>(1 - ogłoszenie bezpłatne, 2 - ogłoszenie premium, 3 - ogłoszenie wyróżnione) </th>
+    <th>Automatyczne odnowienie<br>(1-tak, 0-nie) </th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let record of records;let i = index;">
+    <td> <span>{{record.title}}</span> </td>
+    <td> <span>{{record.description}}</span> </td>
+    <td> <span>{{record.cat1Id}}</span> </td>
+    <td> <span>{{record.cat2Id}}</span> </td>
+    <td> <span>{{record.cat3Id}}</span> </td>
+    <td> <span>{{record.contactName}}</span> </td>
+    <td> <span>{{record.telephone}}</span> </td>
+    <td> <span>{{record.emailDisabled}}</span> </td>
+    <td> <span>{{record.adSell}}</span> </td>
+    <td> <span>{{record.price}}</span> </td>
+    <td> <span>{{record.cityId}}</span><br>
+      <form >
+      <select [(ngModel)]="selectedCity" name="citySelect">
+        <option [id]="i" *ngFor="let city of cities" [value]="city[0]">{{ city[1] }}</option>
+      </select>
+      <br>
+      {{selectedCity}}
+      <br>
+      </form>
+      </td>
+    <td> <span>{{record.adType}}</span> </td>
+    <td> <span>{{record.autoRenewal}}</span> </td>
+  </tr>
+  </tbody>
+</table>
+
