@@ -36,11 +36,10 @@ export class ApiService {
 
   public postOgloszenie(data) {
     const headers = new HttpHeaders({
-      'API-Key': this.apiKey,
-      'Content-Type': 'application/json'
+      'API-Key': this.apiKey
     });
     const apiUrl = 'https://api.oglaszamy24.pl/api/adverts';
     console.log(data);
-    return this.httpClient.post(apiUrl, data, {headers});
+    return this.httpClient.post(apiUrl, {data},  {headers});
   }
 }

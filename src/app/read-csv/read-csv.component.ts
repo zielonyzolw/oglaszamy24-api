@@ -119,37 +119,6 @@ export class ReadCsvComponent implements OnInit {
   }
 
   public createJson(i, record, selectedCity) {
-    // const data = {
-    //   data: {
-    //     title: '',
-    //     description: '',
-    //     cat1_id: '',
-    //     cat2_id: '',
-    //     cat3_id: '',
-    //     contact_name: '',
-    //     telephone: '',
-    //     email_disabled: '',
-    //     ad_sell: '',
-    //     price: '',
-    //     city_id: '',
-    //     ad_type: '',
-    //     auto_renewal: ''
-    //   }
-    // };
-    // data.data.title = record.title;
-    // data.data.description = record.description;
-    // data.data.cat1_id = record.cat1Id;
-    // data.data.cat2_id = record.cat2Id;
-    // data.data.cat3_id = record.cat3Id;
-    // data.data.contact_name = record.contactName;
-    // data.data.telephone = record.telephone;
-    // data.data.email_disabled = record.emailDisabled;
-    // data.data.ad_sell = record.adSell;
-    // data.data.price = record.price;
-    // data.data.city_id = selectedCity[i];
-    // data.data.ad_type = record.adType;
-    // data.data.auto_renewal = record.autoRenewal;
-
     const data = {
         title: '',
         description: '',
@@ -182,7 +151,7 @@ export class ReadCsvComponent implements OnInit {
 
     this.apiService.postOgloszenie(data).subscribe((res) => {
       console.log(res);
-      return data.json();
+      return data;
     });
   }
 }
