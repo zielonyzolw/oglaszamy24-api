@@ -1,8 +1,7 @@
-import { Component, OnInit, ViewChild  } from '@angular/core';
-import {CSVRecord} from '../CSVModel';
-import { HttpClient, HttpHeaders  } from '@angular/common/http';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { CSVRecord } from '../CSVModel';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ApiService } from '../api.service';
-import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-read-csv',
@@ -15,22 +14,19 @@ export class ReadCsvComponent implements OnInit {
   }
 
   public records: any[] = [];
-  // tslint:disable-next-line:ban-types
   public categories: [];
   public cities: Array<any>;
+  public selectedCity = [];
   @ViewChild('csvReader') csvReader: any;
-  selectedCity: any;
 
   ngOnInit() {
 
   }
 
+  public uploadListener($event: any): void {
 
-
-  uploadListener($event: any): void {
-
-    const text = [];
-    const files = $event.srcElement.files;
+    // const text = [];
+    const files = $event.target.files || $event.srcElement.files;
 
     if (this.isValidCSVFile(files[0])) {
 
@@ -46,23 +42,23 @@ export class ReadCsvComponent implements OnInit {
         this.records = this.getDataRecordsArrayFromCSVFile(csvRecordsArray, headersRow.length);
       };
 
-      // tslint:disable-next-line:only-arrow-functions
-      reader.onerror = function() {
+      reader.onerror = () => {
         console.log('error is occured while reading file!');
       };
 
+      this.getApi();
+
     } else {
-      alert('Please import valid .csv file.');
+      alert('Proszę wgrać plik .csv');
       this.fileReset();
     }
   }
 
-  getDataRecordsArrayFromCSVFile(csvRecordsArray: any, headerLength: any) {
+  private getDataRecordsArrayFromCSVFile(csvRecordsArray: any, headerLength: number) {
     const csvArr = [];
 
     for (let i = 1; i < csvRecordsArray.length; i++) {
       const currentRecord = (csvRecordsArray[i]).split(',');
-      console.log(currentRecord);
       if (currentRecord.length === headerLength) {
         const csvRecord: CSVRecord = new CSVRecord();
         csvRecord.title = currentRecord[0].trim();
@@ -84,21 +80,21 @@ export class ReadCsvComponent implements OnInit {
     return csvArr;
   }
 
-  isValidCSVFile(file: any) {
+  private isValidCSVFile(file: any) {
     return file.name.endsWith('.csv');
   }
 
-  getHeaderArray(csvRecordsArr: any) {
+  private getHeaderArray(csvRecordsArr: any) {
     const headers = (csvRecordsArr[0] as string).split(',');
     const headerArray = [];
-    // tslint:disable-next-line:prefer-for-of
+
     for (let j = 0; j < headers.length; j++) {
       headerArray.push(headers[j]);
     }
     return headerArray;
   }
 
-  fileReset() {
+  public fileReset() {
     this.csvReader.nativeElement.value = '';
     this.records = [];
   }
@@ -108,20 +104,85 @@ export class ReadCsvComponent implements OnInit {
     //   console.log(res);
     // });
     //
-    // this.apiService.getCategories().subscribe((res) => {
-    //   this.categories = res.data.categories;
-    //   console.log(res);
-    // });
+    this.apiService.getCategories().subscribe((res) => {
+      this.categories = res.data.categories;
+      console.log(res);
+    });
 
     this.apiService.getCities().subscribe((res) => {
       this.cities = Object.entries(res.data.cities);
-      console.log(this.cities);
-      // this.cities = Object.entries(res.data.cities);
-      // console.log(this.cities);
-      // console.log(Object.entries(this.cities));
-      // for (let [id, value] of Object.entries(this.cities)) {
-      //   console.log(`${id}: ${value}`);
-      // }
     });
-}
+  }
+
+  public selected(i) {
+    console.log('kategoria dla wiersza' + i, this.selectedCity[i]);
+  }
+
+  public createJson(i, record, selectedCity) {
+    // const data = {
+    //   data: {
+    //     title: '',
+    //     description: '',
+    //     cat1_id: '',
+    //     cat2_id: '',
+    //     cat3_id: '',
+    //     contact_name: '',
+    //     telephone: '',
+    //     email_disabled: '',
+    //     ad_sell: '',
+    //     price: '',
+    //     city_id: '',
+    //     ad_type: '',
+    //     auto_renewal: ''
+    //   }
+    // };
+    // data.data.title = record.title;
+    // data.data.description = record.description;
+    // data.data.cat1_id = record.cat1Id;
+    // data.data.cat2_id = record.cat2Id;
+    // data.data.cat3_id = record.cat3Id;
+    // data.data.contact_name = record.contactName;
+    // data.data.telephone = record.telephone;
+    // data.data.email_disabled = record.emailDisabled;
+    // data.data.ad_sell = record.adSell;
+    // data.data.price = record.price;
+    // data.data.city_id = selectedCity[i];
+    // data.data.ad_type = record.adType;
+    // data.data.auto_renewal = record.autoRenewal;
+
+    const data = {
+        title: '',
+        description: '',
+        cat1_id: '',
+        cat2_id: '',
+        cat3_id: '',
+        contact_name: '',
+        telephone: '',
+        email_disabled: '',
+        ad_sell: '',
+        price: '',
+        city_id: '',
+        ad_type: '',
+        auto_renewal: ''
+    };
+    data.title = record.title;
+    data.description = record.description;
+    data.cat1_id = record.cat1Id;
+    data.cat2_id = record.cat2Id;
+    data.cat3_id = record.cat3Id;
+    data.contact_name = record.contactName;
+    data.telephone = record.telephone;
+    data.email_disabled = record.emailDisabled;
+    data.ad_sell = record.adSell;
+    data.price = record.price;
+    data.city_id = selectedCity[i];
+    data.ad_type = record.adType;
+    data.auto_renewal = record.autoRenewal;
+    console.log(data);
+
+    this.apiService.postOgloszenie(data).subscribe((res) => {
+      console.log(res);
+      return data.json();
+    });
+  }
 }

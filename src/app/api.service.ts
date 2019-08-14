@@ -33,4 +33,14 @@ export class ApiService {
     const apiUrl = 'https://api.oglaszamy24.pl/api/cities';
     return this.httpClient.get(apiUrl, {headers});
   }
+
+  public postOgloszenie(data) {
+    const headers = new HttpHeaders({
+      'API-Key': this.apiKey,
+      'Content-Type': 'application/json'
+    });
+    const apiUrl = 'https://api.oglaszamy24.pl/api/adverts';
+    console.log(data);
+    return this.httpClient.post(apiUrl, data, {headers});
+  }
 }
