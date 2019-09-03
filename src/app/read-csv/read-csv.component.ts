@@ -10,7 +10,7 @@ import { ApiService } from '../api.service';
 })
 export class ReadCsvComponent implements OnInit {
 
-  constructor(private apiService: ApiService) {
+  constructor(private apiService: ApiService, private httpClient: HttpClient) {
   }
 
   public records: any[] = [];
@@ -104,21 +104,18 @@ export class ReadCsvComponent implements OnInit {
     //   console.log(res);
     // });
     //
-    this.apiService.getCategories().subscribe((res) => {
-      this.categories = res.data.categories;
-      console.log(res);
-    });
-
-    this.apiService.getCities().subscribe((res) => {
-      this.cities = Object.entries(res.data.cities);
-    });
+    // this.apiService.getCategories().subscribe((res) => {
+    //   this.categories = res.data.categories;
+    //   console.log(res);
+    // });
+    //
+    // this.apiService.getCities().subscribe((res) => {
+    //   this.cities = Object.entries(res.data.cities);
+    // });
   }
 
-  public selected(i) {
-    console.log('kategoria dla wiersza' + i, this.selectedCity[i]);
-  }
 
-  public createJson(i, record, selectedCity) {
+  public createJson(i, record) {
     const data = {
         title: '',
         description: '',
@@ -144,14 +141,24 @@ export class ReadCsvComponent implements OnInit {
     data.email_disabled = record.emailDisabled;
     data.ad_sell = record.adSell;
     data.price = record.price;
-    data.city_id = selectedCity[i];
+    data.city_id = record.cityId;
     data.ad_type = record.adType;
     data.auto_renewal = record.autoRenewal;
-    console.log(data);
+    // console.log(data);
 
-    this.apiService.postOgloszenie(data).subscribe((res) => {
-      console.log(res);
-      return data;
+    const headers = new HttpHeaders({
+      'API-Key': 'S6IXIebUtkndU2RNRaiDzOEFSyI9X6i7'
     });
+    const apiUrl = 'https://api.oglaszamy24.pl/api/adverts';
+    const dataSend = JSON.stringify(data);
+    this.httpClient.post(apiUrl, {data},  {headers}).subscribe(data => {
+      console.log(dataSend);
+      return dataSend;
+    });
+
+    // this.apiService.postOgloszenie(data).subscribe(data => {
+    //   console.log(data);
+    //   return data;
+    // });
   }
 }

@@ -39,7 +39,9 @@ export class ApiService {
       'API-Key': this.apiKey
     });
     const apiUrl = 'https://api.oglaszamy24.pl/api/adverts';
-    console.log(data);
+    // console.log(data);
+    // const dataSend = JSON.stringify(data);
+    // console.log(dataSend);
     return this.httpClient.post(apiUrl, {data},  {headers});
   }
 }

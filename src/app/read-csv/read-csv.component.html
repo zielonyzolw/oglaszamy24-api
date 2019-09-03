@@ -39,18 +39,7 @@
     <td><span>{{record.emailDisabled}}</span></td>
     <td><span>{{record.adSell}}</span></td>
     <td><span>{{record.price}}</span></td>
-    <td><span>{{record.cityId}}</span><br>
-      <form>
-        <select [(ngModel)]="selectedCity[i]"
-                [name]="'citySelect'+i"
-                (ngModelChange)="selected(i)">
-          <option *ngFor="let city of cities"
-                  [value]="city[0]">{{ city[1] }}</option>
-        </select>
-        <br>
-        {{selectedCity[i]}}
-      </form>
-    </td>
+    <td><span>{{record.cityId}}</span><br></td>
     <td><span>{{record.adType}}</span></td>
     <td><span>{{record.autoRenewal}}</span></td>
     <button (click)="createJson(i, record, selectedCity)">create Json</button>
