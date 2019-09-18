@@ -10,7 +10,7 @@ import { ApiService } from '../api.service';
 })
 export class ReadCsvComponent implements OnInit {
 
-  constructor(private apiService: ApiService, private httpClient: HttpClient) {
+  constructor(private apiService: ApiService) {
   }
 
   public records: any[] = [];
@@ -116,6 +116,7 @@ export class ReadCsvComponent implements OnInit {
 
 
   public createJson(i, record) {
+    const datas = new FormData();
     const data = {
         title: '',
         description: '',
@@ -144,19 +145,23 @@ export class ReadCsvComponent implements OnInit {
     data.city_id = record.cityId;
     data.ad_type = record.adType;
     data.auto_renewal = record.autoRenewal;
-    // console.log(data);
-
-    const headers = new HttpHeaders({
-      'API-Key': 'S6IXIebUtkndU2RNRaiDzOEFSyI9X6i7'
-    });
-    const apiUrl = 'https://api.oglaszamy24.pl/api/adverts';
+    console.log(data);
     const dataSend = JSON.stringify(data);
-    this.httpClient.post(apiUrl, {data},  {headers}).subscribe(data => {
-      console.log(dataSend);
-      return dataSend;
+
+    this.apiService.postOgloszenie(dataSend).subscribe((res) => {
+      return res;
     });
 
-    // this.apiService.postOgloszenie(data).subscribe(data => {
+    // console.log(this.apiService.postOgloszenie(dataSend).subscribe());
+
+    // const headers = new HttpHeaders({
+    //   'API-Key': 'S6IXIebUtkndU2RNRaiDzOEFSyI9X6i7'
+    // });
+    // const apiUrl = 'https://api.oglaszamy24.pl/api/adverts';
+    // const dataSend = JSON.stringify(data);
+    // console.log(dataSend);
+    //
+    // this.httpClient.post(apiUrl, {},  {headers}).subscribe((data) => {
     //   console.log(data);
     //   return data;
     // });

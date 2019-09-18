@@ -38,6 +38,7 @@ export class ApiService {
     const headers = new HttpHeaders({
       'API-Key': this.apiKey
     });
+    // data = data[data];
     const apiUrl = 'https://api.oglaszamy24.pl/api/adverts';
     // console.log(data);
     // const dataSend = JSON.stringify(data);
